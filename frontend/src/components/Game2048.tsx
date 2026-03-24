@@ -6,7 +6,7 @@ import {
 } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { useSubmitScore, useBestScore } from '../hooks/useLeaderboard';
-import { inkSepolia } from '../config/chains';
+import { inkMainnet } from '../config/chains';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -222,8 +222,8 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
     if (!address) return;
     setSubmitError(null);
 
-    if (chainId !== inkSepolia.id) {
-      switchChain({ chainId: inkSepolia.id });
+    if (chainId !== inkMainnet.id) {
+      switchChain({ chainId: inkMainnet.id });
       return;
     }
 
@@ -237,7 +237,7 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
 
   const onChainBest = bestScore !== undefined ? Number(bestScore) : 0;
   const displayBest = Math.max(localBest, onChainBest);
-  const isWrongNetwork = !!address && chainId !== inkSepolia.id;
+  const isWrongNetwork = !!address && chainId !== inkMainnet.id;
 
   return (
     <div className="flex flex-col items-center gap-4 w-full select-none">
@@ -259,10 +259,10 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
         <div className="w-full max-w-sm flex items-center gap-3 bg-orange-900/50 border border-orange-500/40 rounded-xl px-4 py-2 text-sm text-orange-300">
           <span>⚠️ Wrong network.</span>
           <button
-            onClick={() => switchChain({ chainId: inkSepolia.id })}
+            onClick={() => switchChain({ chainId: inkMainnet.id })}
             className="ml-auto underline hover:text-orange-100"
           >
-            Switch to Ink Sepolia
+            Switch to Ink
           </button>
         </div>
       )}
@@ -333,7 +333,7 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
       </div>
 
       <p className="text-gray-600 text-xs mt-1">
-        ← → ↑ ↓ or swipe to play
+        ← → ↑ ↓ &nbsp;·&nbsp; WASD &nbsp;·&nbsp; swipe
       </p>
     </div>
   );
