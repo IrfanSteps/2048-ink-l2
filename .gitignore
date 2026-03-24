@@ -1,0 +1,10 @@
+# Foundry build artifacts
+/out
+/cache
+/broadcast
+
+# Environment
+.env
+
+# macOS
+.DS_Store

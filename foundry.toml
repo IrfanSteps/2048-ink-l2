@@ -1,0 +1,11 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.20"
+
+[rpc_endpoints]
+ink_sepolia = "https://rpc-gel-sepolia-ingress.inkonchain.com"
+
+[etherscan]
+ink_sepolia = { key = "verifyContract", url = "https://explorer-sepolia.inkonchain.com/api" }
