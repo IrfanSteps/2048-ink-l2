@@ -71,9 +71,11 @@ export function CheckIn() {
   // ── Not connected ──────────────────────────────
   if (!address) {
     return (
-      <div className="rounded-2xl bg-white/5 border border-white/10 p-4 text-center text-sm text-gray-500">
+      <div className="rounded-2xl bg-white/5 border border-white/10 p-4 text-center text-sm text-gray-500 space-y-1">
         <p className="text-lg mb-1">🔥 Daily Check-In</p>
         <p>Connect your wallet to start your streak.</p>
+        <p className="text-xs text-gray-600">Check in daily to boost your score!</p>
+        <p className="text-xs text-gray-600">Day 7 streak = x1.7 multiplier on final score</p>
       </div>
     );
   }
@@ -113,6 +115,10 @@ export function CheckIn() {
         {currentStreak === 0
           ? 'No streak yet — check in to start!'
           : `Day ${currentStreak} streak${currentStreak === 7 ? ' 🏆 Max!' : ''}`}
+      </p>
+      <p className="text-center text-xs text-gray-600">
+        Check in daily to boost your score!{' '}
+        <span className="text-gray-500">Day 7 streak = x1.7 multiplier on final score</span>
       </p>
 
       {/* Button / status */}

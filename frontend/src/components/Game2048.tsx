@@ -5,7 +5,7 @@ import {
   useRef,
 } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { useSubmitScore, useBestScore } from '../hooks/useLeaderboard';
+import { useSubmitScore, useBestScore, useStreak } from '../hooks/useLeaderboard';
 import { inkMainnet } from '../config/chains';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -139,6 +139,12 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
   const { switchChain } = useSwitchChain();
   const { submitScore, isPending, isConfirming, isConfirmed, error: txError } = useSubmitScore();
   const { bestScore, refetch: refetchBest } = useBestScore(address);
+  const { streak } = useStreak(address);
+
+  // streak 0 or undefined → x1.0 (no boost); 1-7 → x1.1 … x1.7
+  const currentStreak   = streak ?? 0;
+  const multiplier      = currentStreak > 0 ? 1 + currentStreak * 0.1 : 1.0;
+  const multiplierLabel = currentStreak > 0 ? `x${multiplier.toFixed(1)}` : 'x1.0';
 
   const [grid, setGrid]           = useState<Grid>(initGrid);
   const [score, setScore]         = useState(0);
@@ -218,6 +224,8 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
     setSubmitError(null);
   };
 
+  const finalScore = Math.round(score * multiplier);
+
   const handleSubmit = async () => {
     if (!address) return;
     setSubmitError(null);
@@ -228,7 +236,7 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
     }
 
     try {
-      await submitScore(BigInt(score));
+      await submitScore(BigInt(finalScore));
       setSubmitted(true);
     } catch (e: unknown) {
       setSubmitError(e instanceof Error ? e.message : 'Transaction failed');
@@ -273,6 +281,12 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* Multiplier badge — top-right corner of the board */}
+        {currentStreak > 0 && (
+          <div className="absolute top-2 right-2 z-10 flex items-center gap-1 bg-black/60 backdrop-blur-sm rounded-full px-2 py-0.5 text-xs font-bold text-orange-300 border border-orange-500/30">
+            🔥 {multiplierLabel}
+          </div>
+        )}
         <div className="grid grid-cols-4 gap-2" style={{ width: 'min(88vw, 360px)' }}>
           {grid.map((row, r) =>
             row.map((cell, c) => (
@@ -291,9 +305,24 @@ export function Game2048({ onScoreSubmitted }: Game2048Props) {
 
         {/* Game Over overlay */}
         {gameOver && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-black/70 backdrop-blur-sm animate-fade-in gap-4">
+          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl bg-black/70 backdrop-blur-sm animate-fade-in gap-3">
             <p className="text-3xl font-black text-white">Game Over</p>
-            <p className="text-ink-300 font-bold text-xl">{score.toLocaleString()} pts</p>
+
+            {/* Score breakdown */}
+            <div className="text-center space-y-0.5">
+              <p className="text-gray-400 text-xs">
+                Base: <span className="text-white font-semibold">{score.toLocaleString()}</span>
+                {currentStreak > 0 && (
+                  <>
+                    {' '}× <span className="text-orange-300 font-bold">{multiplierLabel}</span>
+                    {' '}(day {currentStreak} streak)
+                  </>
+                )}
+              </p>
+              <p className="text-ink-300 font-bold text-xl">
+                {finalScore.toLocaleString()} pts
+              </p>
+            </div>
 
             {address ? (
               <>
