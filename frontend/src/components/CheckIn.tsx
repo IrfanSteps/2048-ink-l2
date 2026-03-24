@@ -31,7 +31,6 @@ export function CheckIn() {
   const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Recompute countdown every second based on lastCheckIn timestamp.
   useEffect(() => {
     if (lastCheckIn === undefined) {
       setSecondsLeft(null);
@@ -49,7 +48,6 @@ export function CheckIn() {
     return () => clearInterval(id);
   }, [lastCheckIn]);
 
-  // Refetch streak data after a confirmed tx.
   useEffect(() => {
     if (isConfirmed) refetch();
   }, [isConfirmed, refetch]);
@@ -71,11 +69,11 @@ export function CheckIn() {
   // ── Not connected ──────────────────────────────
   if (!address) {
     return (
-      <div className="rounded-2xl bg-white/5 border border-white/10 p-4 text-center text-sm text-gray-500 space-y-1">
+      <div className="rounded-2xl bg-white/5 border border-white/10 p-4 text-center text-sm text-gray-300 space-y-1">
         <p className="text-lg mb-1">🔥 Daily Check-In</p>
         <p>Connect your wallet to start your streak.</p>
-        <p className="text-xs text-gray-600">Check in daily to boost your score!</p>
-        <p className="text-xs text-gray-600">Day 7 streak = x1.7 multiplier on final score</p>
+        <p className="text-xs text-gray-300">Check in daily to boost your score!</p>
+        <p className="text-xs text-gray-300">Day 7 streak = x1.7 multiplier on final score</p>
       </div>
     );
   }
@@ -85,7 +83,6 @@ export function CheckIn() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-white font-semibold text-sm">🔥 Daily Check-In</span>
-        {/* Multiplier badge */}
         <span
           className={`text-xs font-bold px-2.5 py-0.5 rounded-full bg-gradient-to-r ${gradientClass} text-white shadow-sm`}
         >
@@ -111,23 +108,23 @@ export function CheckIn() {
       </div>
 
       {/* Streak label */}
-      <p className="text-center text-xs text-gray-400">
+      <p className="text-center text-xs text-gray-300">
         {currentStreak === 0
           ? 'No streak yet — check in to start!'
           : `Day ${currentStreak} streak${currentStreak === 7 ? ' 🏆 Max!' : ''}`}
       </p>
-      <p className="text-center text-xs text-gray-600">
+      <p className="text-center text-xs text-gray-300">
         Check in daily to boost your score!{' '}
-        <span className="text-gray-500">Day 7 streak = x1.7 multiplier on final score</span>
+        <span className="text-gray-200">Day 7 streak = x1.7 multiplier on final score</span>
       </p>
 
       {/* Button / status */}
       {alreadyCheckedIn ? (
         <div className="text-center space-y-0.5">
           <p className="text-green-400 text-sm font-medium">✅ Come back tomorrow!</p>
-          <p className="text-gray-500 text-xs">
+          <p className="text-gray-300 text-xs">
             Next check-in in{' '}
-            <span className="font-mono text-gray-400">
+            <span className="font-mono text-gray-200">
               {secondsLeft !== null ? formatCountdown(secondsLeft) : '—'}
             </span>
           </p>
