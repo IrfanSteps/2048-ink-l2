@@ -1,6 +1,6 @@
 // Ink Mainnet (chain ID 57073)
 export const LEADERBOARD_ADDRESS =
-  '0xE08F733CbEA9321189893Fa1DbEebD63F784d57a' as const;
+  '0x5b92d630F4a3CDCBD2944d5AF0f095e9b9E8EC8f' as const;
 
 export const LEADERBOARD_CHAIN_ID = 57073;
 
@@ -42,6 +42,43 @@ export const LEADERBOARD_ABI = [
     inputs: [
       { name: 'player', type: 'address', indexed: true },
       { name: 'score',  type: 'uint256', indexed: false },
+    ],
+  },
+  // ── Check-in ──────────────────────────────────
+  {
+    name: 'checkIn',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: [],
+  },
+  {
+    name: 'getStreak',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'player', type: 'address' }],
+    outputs: [{ name: '', type: 'uint8' }],
+  },
+  {
+    name: 'getMultiplier',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'player', type: 'address' }],
+    outputs: [{ name: '', type: 'string' }],
+  },
+  {
+    name: 'lastCheckIn',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: '', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }],
+  },
+  {
+    name: 'CheckedIn',
+    type: 'event',
+    inputs: [
+      { name: 'player', type: 'address', indexed: true },
+      { name: 'streak', type: 'uint8',   indexed: false },
     ],
   },
 ] as const;

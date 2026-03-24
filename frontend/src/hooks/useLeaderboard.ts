@@ -136,3 +136,68 @@ export function useSubmitScore() {
     error,
   };
 }
+
+// ─── useCheckIn ──────────────────────────────────────────────────────────────
+
+export function useCheckIn() {
+  const { writeContractAsync, isPending, data: txHash, error } = useWriteContract();
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash: txHash });
+
+  const checkIn = async () => {
+    await writeContractAsync({
+      address: LEADERBOARD_ADDRESS,
+      abi: LEADERBOARD_ABI,
+      functionName: 'checkIn',
+      chainId: inkMainnet.id,
+    });
+  };
+
+  return { checkIn, isPending, isConfirming, isConfirmed, txHash, error };
+}
+
+// ─── useStreak ───────────────────────────────────────────────────────────────
+
+export function useStreak(address?: Address) {
+  const { data: streakData, isLoading: streakLoading, refetch: refetchStreak } = useReadContract({
+    address: LEADERBOARD_ADDRESS,
+    abi: LEADERBOARD_ABI,
+    functionName: 'getStreak',
+    args: address ? [address] : undefined,
+    chainId: inkMainnet.id,
+    query: { enabled: !!address },
+  });
+
+  const { data: lastCheckInData, refetch: refetchLastCheckIn } = useReadContract({
+    address: LEADERBOARD_ADDRESS,
+    abi: LEADERBOARD_ABI,
+    functionName: 'lastCheckIn',
+    args: address ? [address] : undefined,
+    chainId: inkMainnet.id,
+    query: { enabled: !!address },
+  });
+
+  const { data: multiplierData, refetch: refetchMultiplier } = useReadContract({
+    address: LEADERBOARD_ADDRESS,
+    abi: LEADERBOARD_ABI,
+    functionName: 'getMultiplier',
+    args: address ? [address] : undefined,
+    chainId: inkMainnet.id,
+    query: { enabled: !!address },
+  });
+
+  const refetch = () => {
+    refetchStreak();
+    refetchLastCheckIn();
+    refetchMultiplier();
+  };
+
+  return {
+    streak: streakData as number | undefined,
+    lastCheckIn: lastCheckInData as bigint | undefined,
+    multiplier: multiplierData as string | undefined,
+    isLoading: streakLoading,
+    refetch,
+  };
+}

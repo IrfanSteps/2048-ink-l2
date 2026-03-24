@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { WalletButton } from './components/WalletButton';
 import { Game2048 } from './components/Game2048';
 import { Leaderboard } from './components/Leaderboard';
+import { CheckIn } from './components/CheckIn';
 
 export default function App() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -42,6 +43,8 @@ export default function App() {
             <p>Merge matching tiles to reach <span className="text-ink-300 font-bold">2048</span>!</p>
             <p>Connect your wallet to save your best score on-chain.</p>
           </div>
+          {/* Check-In */}
+          <CheckIn />
           {/* Leaderboard */}
           <Leaderboard refreshKey={refreshKey} />
         </aside>
