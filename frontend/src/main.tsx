@@ -6,14 +6,14 @@ import { RainbowKitProvider, getDefaultConfig, darkTheme } from '@rainbow-me/rai
 import '@rainbow-me/rainbowkit/styles.css';
 import './index.css';
 import App from './App';
-import { inkSepolia } from './config/chains';
+import { inkMainnet, inkSepolia } from './config/chains';
 
 const config = getDefaultConfig({
   appName: '2048 on Ink',
   // Use a real WalletConnect Project ID from https://cloud.walletconnect.com
   // for production. The placeholder below works for local dev.
   projectId: 'a79fc748eb25885ec7c337cd69d25296',
-  chains: [inkSepolia],
+  chains: [inkMainnet, inkSepolia],
   ssr: false,
 });
 

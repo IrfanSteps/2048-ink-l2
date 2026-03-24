@@ -1,19 +1,16 @@
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { createPublicClient, http, fallback } from 'viem';
+import { createPublicClient, http } from 'viem';
 import { useState, useEffect, useCallback } from 'react';
 import { LEADERBOARD_ADDRESS, LEADERBOARD_ABI } from '../config/contracts';
-import { inkSepolia } from '../config/chains';
+import { inkMainnet } from '../config/chains';
 import type { Address } from 'viem';
 
 // ─── Standalone publicClient (no wallet required) ────────────────────────────
 // Uses primary RPC with fallback so reads always work regardless of wallet state.
 
 const publicClient = createPublicClient({
-  chain: inkSepolia,
-  transport: fallback([
-    http('https://rpc-qnd-sepolia.inkonchain.com', { timeout: 8_000 }),
-    http('https://ink-sepolia.g.alchemy.com/public',       { timeout: 8_000 }),
-  ]),
+  chain: inkMainnet,
+  transport: http('https://rpc-qnd.inkonchain.com', { timeout: 8_000 }),
 });
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -101,7 +98,7 @@ export function useBestScore(address?: Address) {
     abi: LEADERBOARD_ABI,
     functionName: 'bestScore',
     args: address ? [address] : undefined,
-    chainId: inkSepolia.id,
+    chainId: inkMainnet.id,
     query: { enabled: !!address },
   });
 
@@ -126,7 +123,7 @@ export function useSubmitScore() {
       abi: LEADERBOARD_ABI,
       functionName: 'submitScore',
       args: [score],
-      chainId: inkSepolia.id,
+      chainId: inkMainnet.id,
     });
   };
 

@@ -1,5 +1,8 @@
+// Ink Mainnet (chain ID 57073)
 export const LEADERBOARD_ADDRESS =
-  '0x6664b645777bA229822c86135D853cf26702AEfB' as const;
+  '0xE08F733CbEA9321189893Fa1DbEebD63F784d57a' as const;
+
+export const LEADERBOARD_CHAIN_ID = 57073;
 
 export const LEADERBOARD_ABI = [
   {
