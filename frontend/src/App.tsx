@@ -20,7 +20,7 @@ export default function App() {
             2048
           </span>
           <span className="text-xs px-2 py-0.5 rounded-full bg-ink-900 text-ink-300 border border-ink-700 font-medium">
-            Ink Sepolia
+            Ink
           </span>
         </div>
         <WalletButton />
